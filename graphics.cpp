@@ -99,7 +99,7 @@ void makeTexture()
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);	// blends using ALPHA values.*/
 
 
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);	// sets the background color (RGBA)
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);	// sets the background color (RGBA)
 
      glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
@@ -109,7 +109,7 @@ void makeTexture()
 
    glEnable(GL_LIGHTING);
    glEnable(GL_LIGHT0);
-    //glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
       startList = glGenLists(1);
    qobj =  gluNewQuadric();
    gluQuadricCallback(qobj, GLU_ERROR,(void(__stdcall*)())errorCallback);
@@ -117,13 +117,13 @@ void makeTexture()
 	gluQuadricDrawStyle(qobj, GLU_FILL); /* flat shaded */
    gluQuadricNormals(qobj, GLU_FLAT);
    glNewList(startList, GL_COMPILE);
-      gluCylinder(qobj, 0.5, 0.5, 1.0, 15, 5);
+      gluCylinder(qobj, 4, 4, 25, 15, 5);
    glEndList();
 
 	glMatrixMode(GL_PROJECTION);
 	// sets the matrix mode to projection
 
-	gluPerspective(45.0f, (double)width/(double)height, 1.0f, 1000.0f);
+	gluPerspective(45.0f, (double)width/(double)height, 80.0f, 1000.0f);
 
 	makeTexture();
 
@@ -141,7 +141,7 @@ void render() {
 
     glEnable(GL_LIGHTING);
 
-    /*glPushMatrix();
+    glPushMatrix();
     glEnable(GL_TEXTURE_2D);
     glBindTexture( GL_TEXTURE_2D, textures[0]);
     glTranslatef(0,0,-100);
@@ -192,21 +192,16 @@ void render() {
     glTranslatef(0,0,100);
 
     glDisable(GL_TEXTURE_2D);
-    glPopMatrix();*/
-
-    glShadeModel (GL_FLAT);
-
-    glPushMatrix();
-    // glTranslatef(-100, 2.0, 0.0);
-     glColor3f(1.0f,0.0f,0.0f);
-    glCallList(startList);
-    //glTranslatef(100.0f,-2.0f,0.0f);
     glPopMatrix();
 
-/*glTranslatef(0,0,-10);
-glRotatef(1.57,1,0,0);
-glCallList(cylinder);
-glRotatef(-1.57,1,0,0);*/
+        glShadeModel (GL_FLAT);
+    glTranslatef(-2.0f,-10.0f,-100.0f);
+    glPushMatrix();
+     glRotatef(300.0f, 1.0f, 0.0f, 0.0f);
+     glColor3f(1.0f,0.0f,0.0f);
+    glCallList(startList);
+    glTranslatef(2.0f,0.0f,100.0f);
+    glPopMatrix();
 
 	//glFlush();	// required because of single-buffering to push things to the screen.
 	glutSwapBuffers();	// for GLUT_DOUBLE, use glutSwapBuffers() to change frames.;
