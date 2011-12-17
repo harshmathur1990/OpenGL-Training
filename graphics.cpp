@@ -4,18 +4,25 @@
 #include <fstream>
 #include <windows.h>
 #include <iostream>
+#include<math.h>
 
 using namespace std;
 
 #define width	1366
 #define height	768
-#define minx	-50.0f
-#define maxx	50.0f
-#define miny	-50.0f
-#define maxy	50.0f
+#define minx	-30.0f
+#define maxx	30.0f
+#define miny	-30.0f
+#define maxy	30.0f
 #define cylinder 1
-float offset = 0, direction=1;
+float offset = 0, dx=0,dy=0,dz=0,h1,h2,h3,h4,h5,h6,h7,h8,hm;
 float spin_speed = 0;
+
+float xpos = 0, ypos = 0, zpos = 0, xrot = 0, yrot = 0, angle=0.0;
+int i;
+float cRadius = 70.0f; // our radius distance from our character
+
+float lastx, lasty;
 
 #ifndef CALLBACK
 #define CALLBACK
@@ -123,10 +130,29 @@ void makeTexture()
 	glMatrixMode(GL_PROJECTION);
 	// sets the matrix mode to projection
 
-	gluPerspective(45.0f, (double)width/(double)height, 80.0f, 1000.0f);
+	gluPerspective(45.0f, (double)width/(double)height, 50.0f, 1000.0f);
 
 	makeTexture();
-
+    ///////////////////////////////////////////////////random heights/////////////////////////////////////////
+    h1 = h2 = h3 = h4 = h5 = h6 = h7 = h8 = hm = 0;
+    while(h1>30 && h2>30 && h3>30 && h4>30 && h5>30 && h6>30 && h7>30 && h8>30){
+        h1 = rand()*100;
+        if(hm < h1) hm = h1;
+        h2 = rand()*100;
+        if(hm < h2) hm = h2;
+        h3 = rand()*100;
+        if(hm < h3) hm = h3;
+        h4 = rand()*100;
+        if(hm < h4) hm = h4;
+        h5 = rand()*100;
+        if(hm < h5) hm = h5;
+        h6 = rand()*100;
+        if(hm < h6) hm = h6;
+        h7 = rand()*100;
+        if(hm < h7) hm = h7;
+        h8 = rand()*100;
+        if(hm < h8) hm = h8;
+        }
 }
 
 void render() {
@@ -141,6 +167,23 @@ void render() {
 
     glEnable(GL_LIGHTING);
 
+
+        glShadeModel (GL_FLAT);
+
+glTranslatef(0.0f, 0.0f, -cRadius);
+    glRotatef(xrot,1.0,0.0,0.0);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glPushMatrix();
+
+     glColor3f(1.0f,0.0f,0.0f);
+
+    glCallList(startList);
+
+    glPopMatrix();
+
+ glRotatef(yrot,0.0,1.0,0.0);  //rotate our camera on the y-axis (up and down)
+    glTranslated(-xpos,0.0f,-zpos); //translate the screen to the position of our camera
+    glColor3f(1.0f, 1.0f, 1.0f);
     glPushMatrix();
     glEnable(GL_TEXTURE_2D);
     glBindTexture( GL_TEXTURE_2D, textures[0]);
@@ -149,41 +192,43 @@ void render() {
     glTranslatef(0,0,100);
 
     glBegin(GL_QUADS);
-    //glColor3f(0.0f,1.0f,0.0f);                     // Set The Color To Green
-     glTexCoord2f(0,0.27f);glVertex3f(minx,maxy,-50.0f);          //top left
+
+     glTexCoord2f(0,0.27f);glVertex3f(minx,maxy+h1,-50.0f);          //top left
      glTexCoord2f(0,0);glVertex3f( minx, miny,-50.0f);          // bottom left
-     glTexCoord2f(0.27f,0);glVertex3f(minx, miny,-150.0f);          // bottom right
-     glTexCoord2f(0.27f,0.27f);glVertex3f(minx, maxy, -150.0f);          // top right
+     glTexCoord2f(0.27f,0);glVertex3f(minx, miny,-110.0f);          // bottom right
+     glTexCoord2f(0.27f,0.27f);glVertex3f(minx, maxy+h2, -110.0f);          // top right
 
    //glColor3f(1.0f,0.5f,0.0f);          // Set The Color To Orange
-     glTexCoord2f(0.27f,0.27f);glVertex3f(minx, miny,-150.0f);              //bottom left
-     glTexCoord2f(0.54f,0.27f);glVertex3f( maxx, miny,-150.0f);          // bottom right
-     glTexCoord2f(0.54f,0.54f);glVertex3f(maxx, maxy,-150.0f);          // top right
-     glTexCoord2f(0.27f,0.54f);glVertex3f(minx, maxy, -150.0f);          // top left
+     glTexCoord2f(0.27f,0.27f);glVertex3f(minx, miny,-110.0f);              //bottom left
+     glTexCoord2f(0.54f,0.27f);glVertex3f( maxx, miny,-110.0f);          // bottom right
+     glTexCoord2f(0.54f,0.54f);glVertex3f(maxx, maxy+h3,-110.0f);          // top right
+     glTexCoord2f(0.27f,0.54f);glVertex3f(minx, maxy+h4, -110.0f);          // top left
 
     //glColor3f(1.0f,0.0f,0.0f);          // Set The Color To Red
-     glTexCoord2f(0.54f,0.54f);glVertex3f( maxx, miny, -150.0f);          // bottom left
-     glTexCoord2f(0.54f,0.81f);glVertex3f(maxx, maxy, -150.0f);          // Top Left
-     glTexCoord2f(0.81f,0.81f);glVertex3f(maxx,maxy, -50.0f);          // top right
+     glTexCoord2f(0.54f,0.54f);glVertex3f( maxx, miny, -110.0f);          // bottom left
+     glTexCoord2f(0.54f,0.81f);glVertex3f(maxx, maxy+h5, -110.0f);          // Top Left
+     glTexCoord2f(0.81f,0.81f);glVertex3f(maxx,maxy+h6, -50.0f);          // top right
      glTexCoord2f(0.81f,0.54f);glVertex3f( maxx,miny, -50.0f);          // Bottom Right
 
 //glColor3f(1.0f,1.0f,0.0f);          // Set The Color To Yellow
-     glTexCoord2f(1,1);glVertex3f( maxx, maxy, -50.0f);          // Top Right Of The Quad (Front)
-     glTexCoord2f(0.81f,1);glVertex3f(minx, maxy, -50.0f);          // Top Left Of The Quad (Front)
+     glTexCoord2f(1,1);glVertex3f( maxx, maxy+h7, -50.0f);          // Top Right Of The Quad (Front)
+     glTexCoord2f(0.81f,1);glVertex3f(minx, maxy+h8, -50.0f);          // Top Left Of The Quad (Front)
      glTexCoord2f(0.81f,0.81f);glVertex3f(minx,miny, -50.0f);          // Bottom Left Of The Quad (Front)
      glTexCoord2f(1,0.81f);glVertex3f( maxx,miny, -50.0f);          // Bottom Right Of The Quad (Front)
 
     //glColor3f(0.0f,0.0f,1.0f);          // Set The Color To Blue
      glTexCoord2f(0.09f,0);glVertex3f(maxx, miny, -50.0f);          // bottom right
      glTexCoord2f(0,0);glVertex3f(minx, miny,-50.0f);          // bottom left
-     glTexCoord2f(0,0.09f);glVertex3f(minx,miny,-150.0f);          // top left
-     glTexCoord2f(0.09f,0.09f);glVertex3f(maxx,miny, -150.0f);          // top right
+     glTexCoord2f(0,0.09f);glVertex3f(minx,miny,-110.0f);          // top left
+     glTexCoord2f(0.09f,0.09f);glVertex3f(maxx,miny, -110.0f);          // top right
 
-   //glColor3f(1.0f,0.0f,1.0f);          // Set The Color To Violet
-     glTexCoord2f(0.09f,0);glVertex3f(maxx, maxy, -150.0f);          // bottom right
-     glTexCoord2f(0.09f,0.09f);glVertex3f(maxx, maxy,-50.0f);          // top right
-     glTexCoord2f(0,0.09f);glVertex3f(minx,maxy,-50.0f);          // top left
-     glTexCoord2f(0,0);glVertex3f(minx,maxy,-150.0f);          // bottom left
+    glEnd();
+
+    glBegin(GL_QUADS);
+     glTexCoord2f(0.09f,0);glVertex3f(maxx, maxy+hm, -110.0f);          // bottom right
+     glTexCoord2f(0.09f,0.09f);glVertex3f(maxx, maxy+hm,-50.0f);          // top right
+     glTexCoord2f(0,0.09f);glVertex3f(minx,maxy+hm,-50.0f);          // top left
+     glTexCoord2f(0,0);glVertex3f(minx,maxy+hm,-110.0f);          // bottom left
 
     glEnd();
 
@@ -194,26 +239,78 @@ void render() {
     glDisable(GL_TEXTURE_2D);
     glPopMatrix();
 
-        glShadeModel (GL_FLAT);
-    glTranslatef(-2.0f,-10.0f,-100.0f);
-    glPushMatrix();
-     glRotatef(300.0f, 1.0f, 0.0f, 0.0f);
-     glColor3f(1.0f,0.0f,0.0f);
-    glCallList(startList);
-    glTranslatef(2.0f,0.0f,100.0f);
-    glPopMatrix();
+
 
 	//glFlush();	// required because of single-buffering to push things to the screen.
 	glutSwapBuffers();	// for GLUT_DOUBLE, use glutSwapBuffers() to change frames.;
+
+	angle++;
 }
 
-void update(){
-    int time = glutGet(GLUT_ELAPSED_TIME);
-    if(time % 100 == 0) {
-     offset = offset - 10;
-      }
-    glutPostRedisplay();
+void keyboard (unsigned char key, int x, int y) {
+    if (key=='q')
+    {
+    xrot += 1;
+    if (xrot >360) xrot -= 360;
     }
+
+    if (key=='z')
+    {
+    xrot -= 1;
+    if (xrot < -360) xrot += 360;
+    }
+
+    if (key=='w')
+    {
+    float xrotrad, yrotrad;
+    yrotrad = (yrot / 180 * 3.141592654f);
+    xrotrad = (xrot / 180 * 3.141592654f);
+    xpos += (float)(sin(yrotrad));
+    zpos -= (float)(cos(yrotrad));
+    ypos -= (float)(sin(xrotrad));
+    }
+
+    if (key=='s')
+    {
+    float xrotrad, yrotrad;
+    yrotrad = (yrot / 180 * 3.141592654f);
+    xrotrad = (xrot / 180 * 3.141592654f);
+    xpos -= (float)(sin(yrotrad));
+    zpos += (float)(cos(yrotrad));
+    ypos += (float)(sin(xrotrad));
+    }
+
+    if (key=='d')
+    {
+    float yrotrad;
+    yrotrad = (yrot / 180 * 3.141592654f);
+    xpos += (float)(cos(yrotrad)) * 0.2;
+    zpos += (float)(sin(yrotrad)) * 0.2;
+    }
+
+    if (key=='a')
+    {
+    float yrotrad;
+    yrotrad = (yrot / 180 * 3.141592654f);
+    xpos -= (float)(cos(yrotrad)) * 0.2;
+    zpos -= (float)(sin(yrotrad)) * 0.2;
+    }
+
+    if (key==27)
+    {
+    exit(0);
+    }
+}
+
+void mouseMovement(int x, int y) {
+    int diffx=x-lastx; //check the difference between the current x and the last x position
+    int diffy=y-lasty; //check the difference between the current y and the last y position
+    lastx=x; //set lastx to the current x position
+    lasty=y; //set lasty to the current y position
+    xrot += (float) diffy; //set the xrot to xrot with the addition of the difference in the y position
+    yrot += (float) diffx;    //set the xrot to yrot with the addition of the difference in the x position
+}
+
 
 int main(int argc, char* argv[]) {
 	glutInit(&argc, argv);
@@ -235,7 +332,12 @@ int main(int argc, char* argv[]) {
 	init();		// things to do once.
 
 	glutDisplayFunc(render);		// tells glut which function to call to render a screen.
-    glutIdleFunc(update);
+   glutIdleFunc (render);
+    //glutReshapeFunc (reshape);
+
+    glutPassiveMotionFunc(mouseMovement); //check for mouse movement
+
+    glutKeyboardFunc (keyboard);
 	glutMainLoop();				// once this is called, glut takes over --
 						// returns only when the window is closed.
 	return 0;
