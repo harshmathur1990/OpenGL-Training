@@ -7,11 +7,11 @@
 
 using namespace std;
 
-#define width	800
-#define height	600
-#define minx	-350.0f
+#define width	1366
+#define height	768
+#define minx	-50.0f
 #define maxx	50.0f
-#define miny	-350.0f
+#define miny	-50.0f
 #define maxy	50.0f
 #define cylinder 1
 float offset = 0, direction=1;
@@ -96,10 +96,10 @@ void makeTexture()
 	//glEnable(GL_DEPTH_TEST);		// depth and blending don't go well together.
 	//glDepthFunc(GL_LEQUAL);
 	glEnable(GL_BLEND);					// Enables blending.
-	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);	// blends using ALPHA values.
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);	// blends using ALPHA values.*/
 
 
-	glClearColor(0.1f, 0.0f, 0.1f, 1.0f);	// sets the background color (RGBA)
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);	// sets the background color (RGBA)
 
      glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
@@ -109,11 +109,16 @@ void makeTexture()
 
    glEnable(GL_LIGHTING);
    glEnable(GL_LIGHT0);
-
+    //glEnable(GL_DEPTH_TEST);
       startList = glGenLists(1);
    qobj =  gluNewQuadric();
-   gluQuadricCallback(qobj, GLU_ERROR,errorCallback);
+   gluQuadricCallback(qobj, GLU_ERROR,(void(__stdcall*)())errorCallback);
 
+	gluQuadricDrawStyle(qobj, GLU_FILL); /* flat shaded */
+   gluQuadricNormals(qobj, GLU_FLAT);
+   glNewList(startList, GL_COMPILE);
+      gluCylinder(qobj, 0.5, 0.5, 1.0, 15, 5);
+   glEndList();
 
 	glMatrixMode(GL_PROJECTION);
 	// sets the matrix mode to projection
@@ -121,31 +126,7 @@ void makeTexture()
 	gluPerspective(45.0f, (double)width/(double)height, 1.0f, 1000.0f);
 
 	makeTexture();
-	gluQuadricDrawStyle(qobj, GLU_FILL); /* flat shaded */
-   gluQuadricNormals(qobj, GLU_FLAT);
-   glNewList(startList, GL_COMPILE);
-      gluCylinder(qobj, 0.5, 0.3, 1.0, 15, 5);
-   glEndList();
-	/*GLUquadricObj *quadric;
 
-
-
-  glNewList(cylinder, GL_COMPILE);
-    quadric = gluNewQuadric();
-    gluQuadricDrawStyle(quadric, GLU_FILL);
-
-    glColor3f(1, 0, 0);
-      gluCylinder(quadric, 1, 0.75, 1, 15, 15);
-
-    glColor3f(0, 1, 0);
-       gluDisk(quadric, 0.5, 1, 15, 15);
-
-    glColor3f(0, 0, 1);
-    glTranslatef(0, 0, 1);
-    gluDisk(quadric, 0.5, 0.75, 15, 15);
-
-    gluDeleteQuadric(quadric);
-  glEndList();*/
 }
 
 void render() {
@@ -160,7 +141,7 @@ void render() {
 
     glEnable(GL_LIGHTING);
 
-    glPushMatrix();
+    /*glPushMatrix();
     glEnable(GL_TEXTURE_2D);
     glBindTexture( GL_TEXTURE_2D, textures[0]);
     glTranslatef(0,0,-100);
@@ -169,40 +150,40 @@ void render() {
 
     glBegin(GL_QUADS);
     //glColor3f(0.0f,1.0f,0.0f);                     // Set The Color To Green
-     glTexCoord2f(0,0.27f);glVertex3f(minx,maxy,-350.0f);          //top left
-     glTexCoord2f(0,0);glVertex3f( minx, miny,-350.0f);          // bottom left
-     glTexCoord2f(0.27f,0);glVertex3f(minx, miny,-450.0f);          // bottom right
-     glTexCoord2f(0.27f,0.27f);glVertex3f(minx, maxy, -450.0f);          // top right
+     glTexCoord2f(0,0.27f);glVertex3f(minx,maxy,-50.0f);          //top left
+     glTexCoord2f(0,0);glVertex3f( minx, miny,-50.0f);          // bottom left
+     glTexCoord2f(0.27f,0);glVertex3f(minx, miny,-150.0f);          // bottom right
+     glTexCoord2f(0.27f,0.27f);glVertex3f(minx, maxy, -150.0f);          // top right
 
    //glColor3f(1.0f,0.5f,0.0f);          // Set The Color To Orange
-     glTexCoord2f(0.27f,0.27f);glVertex3f(minx, miny,-450.0f);              //bottom left
-     glTexCoord2f(0.54f,0.27f);glVertex3f( maxx, miny,-450.0f);          // bottom right
-     glTexCoord2f(0.54f,0.54f);glVertex3f(maxx, maxy,-450.0f);          // top right
-     glTexCoord2f(0.27f,0.54f);glVertex3f(minx, maxy, -450.0f);          // top left
+     glTexCoord2f(0.27f,0.27f);glVertex3f(minx, miny,-150.0f);              //bottom left
+     glTexCoord2f(0.54f,0.27f);glVertex3f( maxx, miny,-150.0f);          // bottom right
+     glTexCoord2f(0.54f,0.54f);glVertex3f(maxx, maxy,-150.0f);          // top right
+     glTexCoord2f(0.27f,0.54f);glVertex3f(minx, maxy, -150.0f);          // top left
 
     //glColor3f(1.0f,0.0f,0.0f);          // Set The Color To Red
-     glTexCoord2f(0.54f,0.54f);glVertex3f( maxx, miny, -450.0f);          // bottom left
-     glTexCoord2f(0.54f,0.81f);glVertex3f(maxx, maxy, -450.0f);          // Top Left
-     glTexCoord2f(0.81f,0.81f);glVertex3f(maxx,maxy, -350.0f);          // top right
-     glTexCoord2f(0.81f,0.54f);glVertex3f( maxx,miny, -350.0f);          // Bottom Right
+     glTexCoord2f(0.54f,0.54f);glVertex3f( maxx, miny, -150.0f);          // bottom left
+     glTexCoord2f(0.54f,0.81f);glVertex3f(maxx, maxy, -150.0f);          // Top Left
+     glTexCoord2f(0.81f,0.81f);glVertex3f(maxx,maxy, -50.0f);          // top right
+     glTexCoord2f(0.81f,0.54f);glVertex3f( maxx,miny, -50.0f);          // Bottom Right
 
 //glColor3f(1.0f,1.0f,0.0f);          // Set The Color To Yellow
-     glTexCoord2f(1,1);glVertex3f( maxx, maxy, -350.0f);          // Top Right Of The Quad (Front)
-     glTexCoord2f(0.81f,1);glVertex3f(minx, maxy, -350.0f);          // Top Left Of The Quad (Front)
-     glTexCoord2f(0.81f,0.81f);glVertex3f(minx,miny, -350.0f);          // Bottom Left Of The Quad (Front)
-     glTexCoord2f(1,0.81f);glVertex3f( maxx,miny, -350.0f);          // Bottom Right Of The Quad (Front)
+     glTexCoord2f(1,1);glVertex3f( maxx, maxy, -50.0f);          // Top Right Of The Quad (Front)
+     glTexCoord2f(0.81f,1);glVertex3f(minx, maxy, -50.0f);          // Top Left Of The Quad (Front)
+     glTexCoord2f(0.81f,0.81f);glVertex3f(minx,miny, -50.0f);          // Bottom Left Of The Quad (Front)
+     glTexCoord2f(1,0.81f);glVertex3f( maxx,miny, -50.0f);          // Bottom Right Of The Quad (Front)
 
     //glColor3f(0.0f,0.0f,1.0f);          // Set The Color To Blue
-     glTexCoord2f(0.09f,0);glVertex3f(maxx, miny, -350.0f);          // bottom right
-     glTexCoord2f(0,0);glVertex3f(minx, miny,-350.0f);          // bottom left
-     glTexCoord2f(0,0.09f);glVertex3f(minx,miny,-450.0f);          // top left
-     glTexCoord2f(0.09f,0.09f);glVertex3f(maxx,miny, -450.0f);          // top right
+     glTexCoord2f(0.09f,0);glVertex3f(maxx, miny, -50.0f);          // bottom right
+     glTexCoord2f(0,0);glVertex3f(minx, miny,-50.0f);          // bottom left
+     glTexCoord2f(0,0.09f);glVertex3f(minx,miny,-150.0f);          // top left
+     glTexCoord2f(0.09f,0.09f);glVertex3f(maxx,miny, -150.0f);          // top right
 
    //glColor3f(1.0f,0.0f,1.0f);          // Set The Color To Violet
-     glTexCoord2f(0.09f,0);glVertex3f(maxx, maxy, -450.0f);          // bottom right
-     glTexCoord2f(0.09f,0.09f);glVertex3f(maxx, maxy,-350.0f);          // top right
-     glTexCoord2f(0,0.09f);glVertex3f(minx,maxy,-350.0f);          // top left
-     glTexCoord2f(0,0);glVertex3f(minx,maxy,-450.0f);          // bottom left
+     glTexCoord2f(0.09f,0);glVertex3f(maxx, maxy, -150.0f);          // bottom right
+     glTexCoord2f(0.09f,0.09f);glVertex3f(maxx, maxy,-50.0f);          // top right
+     glTexCoord2f(0,0.09f);glVertex3f(minx,maxy,-50.0f);          // top left
+     glTexCoord2f(0,0);glVertex3f(minx,maxy,-150.0f);          // bottom left
 
     glEnd();
 
@@ -211,12 +192,15 @@ void render() {
     glTranslatef(0,0,100);
 
     glDisable(GL_TEXTURE_2D);
-    glPopMatrix();
+    glPopMatrix();*/
 
     glShadeModel (GL_FLAT);
-    glTranslatef(-100, 2.0, 0.0);
+
     glPushMatrix();
-    glCallList(startList+1);
+    // glTranslatef(-100, 2.0, 0.0);
+     glColor3f(1.0f,0.0f,0.0f);
+    glCallList(startList);
+    //glTranslatef(100.0f,-2.0f,0.0f);
     glPopMatrix();
 
 /*glTranslatef(0,0,-10);
