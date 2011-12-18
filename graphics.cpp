@@ -193,30 +193,37 @@ glTranslatef(0.0f, 0.0f, -cRadius);
 
     glBegin(GL_QUADS);
 
+        glNormal3f(-1.0f,0.0f,0.0f);
      glTexCoord2f(0,0.27f);glVertex3f(minx,maxy+h1,-50.0f);          //top left
      glTexCoord2f(0,0);glVertex3f( minx, miny,-50.0f);          // bottom left
      glTexCoord2f(0.27f,0);glVertex3f(minx, miny,-110.0f);          // bottom right
      glTexCoord2f(0.27f,0.27f);glVertex3f(minx, maxy+h2, -110.0f);          // top right
 
    //glColor3f(1.0f,0.5f,0.0f);          // Set The Color To Orange
+
+    glNormal3f(0.0f,0.0f,-1.0f);
      glTexCoord2f(0.27f,0.27f);glVertex3f(minx, miny,-110.0f);              //bottom left
      glTexCoord2f(0.54f,0.27f);glVertex3f( maxx, miny,-110.0f);          // bottom right
      glTexCoord2f(0.54f,0.54f);glVertex3f(maxx, maxy+h3,-110.0f);          // top right
      glTexCoord2f(0.27f,0.54f);glVertex3f(minx, maxy+h4, -110.0f);          // top left
 
     //glColor3f(1.0f,0.0f,0.0f);          // Set The Color To Red
+    glNormal3f(1.0f,0.0f,0.0f);
      glTexCoord2f(0.54f,0.54f);glVertex3f( maxx, miny, -110.0f);          // bottom left
      glTexCoord2f(0.54f,0.81f);glVertex3f(maxx, maxy+h5, -110.0f);          // Top Left
      glTexCoord2f(0.81f,0.81f);glVertex3f(maxx,maxy+h6, -50.0f);          // top right
      glTexCoord2f(0.81f,0.54f);glVertex3f( maxx,miny, -50.0f);          // Bottom Right
 
 //glColor3f(1.0f,1.0f,0.0f);          // Set The Color To Yellow
+    glNormal3f(0.0f,0.0f,1.0f);
      glTexCoord2f(1,1);glVertex3f( maxx, maxy+h7, -50.0f);          // Top Right Of The Quad (Front)
      glTexCoord2f(0.81f,1);glVertex3f(minx, maxy+h8, -50.0f);          // Top Left Of The Quad (Front)
      glTexCoord2f(0.81f,0.81f);glVertex3f(minx,miny, -50.0f);          // Bottom Left Of The Quad (Front)
      glTexCoord2f(1,0.81f);glVertex3f( maxx,miny, -50.0f);          // Bottom Right Of The Quad (Front)
 
     //glColor3f(0.0f,0.0f,1.0f);          // Set The Color To Blue
+
+    glNormal3f(0.0f,-1.0f,0.0f);
      glTexCoord2f(0.09f,0);glVertex3f(maxx, miny, -50.0f);          // bottom right
      glTexCoord2f(0,0);glVertex3f(minx, miny,-50.0f);          // bottom left
      glTexCoord2f(0,0.09f);glVertex3f(minx,miny,-110.0f);          // top left
@@ -225,6 +232,7 @@ glTranslatef(0.0f, 0.0f, -cRadius);
     glEnd();
 
     glBegin(GL_QUADS);
+    glNormal3f(0.0f,1.0f,0.0f);
      glTexCoord2f(0.09f,0);glVertex3f(maxx, maxy+hm, -110.0f);          // bottom right
      glTexCoord2f(0.09f,0.09f);glVertex3f(maxx, maxy+hm,-50.0f);          // top right
      glTexCoord2f(0,0.09f);glVertex3f(minx,maxy+hm,-50.0f);          // top left
